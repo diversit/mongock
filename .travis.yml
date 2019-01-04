@@ -6,11 +6,11 @@ sudo: false
 
 install: true
 
-script: .infra/mvn_sonar.sh
+#script: .infra/mvn_sonar.sh
 
 branches:
   only:
-    - master
+    - update-mongo-java-driver
 
 cache:
   directories:
