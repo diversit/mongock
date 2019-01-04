@@ -14,7 +14,7 @@
 
   <groupId>com.github.cloudyrock.mongock</groupId>
   <artifactId>mongock</artifactId>
-  <version>2.0.1-IPOS</version>
+  <version>2.0.1.DIVERSIT</version>
   <packaging>pom</packaging>
 
   <licenses>
