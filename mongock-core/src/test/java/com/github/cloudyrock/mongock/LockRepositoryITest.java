@@ -1,6 +1,5 @@
 package com.github.cloudyrock.mongock;
 
-import com.github.fakemongo.Fongo;
 import com.mongodb.ErrorCategory;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.FindIterable;
@@ -20,9 +19,8 @@ import static org.junit.Assert.assertNull;
  *
  * @since 04/04/2018
  */
-public class LockRepositoryITest {
+public class LockRepositoryITest extends MongoServerBuilder {
 
-  private static final String TEST_SERVER = "testServer";
   private static final String DB_NAME = "mongocktest";
   private static final String LOCK_COLLECTION_NAME = "mongocklock";
   private static final String LOCK_KEY = "LOCK_KEY";
@@ -32,7 +30,7 @@ public class LockRepositoryITest {
 
   @Before
   public void setUp() {
-    db = new Fongo(TEST_SERVER).getDatabase(DB_NAME);
+    db = createServerAndGetDatabase(DB_NAME);
     repository = new LockRepository(LOCK_COLLECTION_NAME, db);
     repository.ensureIndex();
   }

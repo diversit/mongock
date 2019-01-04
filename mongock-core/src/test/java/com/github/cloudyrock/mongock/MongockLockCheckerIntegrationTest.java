@@ -1,9 +1,6 @@
 package com.github.cloudyrock.mongock;
 
 import com.github.cloudyrock.mongock.test.proxy.ProxiesMongockTestResource;
-import com.github.fakemongo.Fongo;
-import com.mongodb.DB;
-import com.mongodb.FongoDB;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
@@ -31,11 +28,11 @@ import static org.mockito.Mockito.when;
  *
  * @since 04/04/2018
  */
-public class MongockLockCheckerIntegrationTest {
+public class MongockLockCheckerIntegrationTest extends MongoServerBuilder {
 
   private static final String LOCK_COLLECTION_NAME = "mongocklock";
   private static final Set<String> unInterceptedMethods =
-      new HashSet<>(Arrays.asList("getCollection", "getCollectionFromString", "getDatabase", "toString"));
+      new HashSet<>(Arrays.asList("getCollection", "getCollectionFromString", "getDatabase", "toString", "getName"));
   private static final Set<String> proxyCreatordMethods =
       new HashSet<>(Arrays.asList("getCollection", "getCollectionFromString", "getDatabase"));
   private Mongock runner;
@@ -47,16 +44,12 @@ public class MongockLockCheckerIntegrationTest {
   private ProxyFactory proxyFactory;
   private ChangeEntryRepository dao;
   private MongockBuilder builder;
-  private FongoDB db;
 
   @Before
   public void setUp() throws NoSuchMethodException, MongockException {
-    db = new Fongo("testServer").getDB("mongocktest");
-    mongoDatabase = spy(new Fongo("testServer").getDatabase("mongocktest"));
+    mongoDatabase = createServerAndGetDatabase("mongocktest");
 
-    MongoClient mongoClient = mock(MongoClient.class);
-    when(mongoClient.getDatabase(anyString())).thenReturn(mongoDatabase);
-    when(mongoClient.getDB(anyString())).thenReturn(db);
+    MongoClient mongoClient = getMockMongoClient(mongoDatabase);
 
     builder = new MongockBuilder(mongoClient,"mongocktest", ProxiesMongockTestResource.class.getPackage().getName())
         .setEnabled(true)
@@ -81,7 +74,7 @@ public class MongockLockCheckerIntegrationTest {
     proxyFactory = new ProxyFactory(preInterceptor, proxyCreatordMethods, unInterceptedMethods);
     doReturn(singletonList(ProxiesMongockTestResource.class))
         .when(changeService).fetchChangeLogs();
-    doReturn(singletonList(ProxiesMongockTestResource.class.getDeclaredMethod("testInsertWithDB", DB.class)))
+    doReturn(singletonList(ProxiesMongockTestResource.class.getDeclaredMethod("testInsertWithDB", MongoDatabase.class)))
         .when(changeService).fetchChangeSets(ProxiesMongockTestResource.class);
 
     this.dao = mock(ChangeEntryRepository.class);
@@ -91,8 +84,7 @@ public class MongockLockCheckerIntegrationTest {
   public void shouldCallEnsureLock() throws Exception {
     when(dao.isNewChange(any(ChangeEntry.class))).thenReturn(true);
     MongoDatabase mongoDatabaseProxy = proxyFactory.createProxyFromOriginal(mongoDatabase);
-    DB dbProxy = proxyFactory.createProxyFromOriginal(db);
-    runner = builder.build(dao, changeService, lockChecker, mongoDatabaseProxy, dbProxy);
+    runner = builder.build(dao, changeService, lockChecker, mongoDatabaseProxy);
     // when
     runner.execute();
 
@@ -110,8 +102,7 @@ public class MongockLockCheckerIntegrationTest {
         .when(timeUtils).currentTime();
     when(dao.isNewChange(any(ChangeEntry.class))).thenReturn(true);
     MongoDatabase mongoDatabaseProxy = proxyFactory.createProxyFromOriginal(mongoDatabase);
-    DB dbProxy = proxyFactory.createProxyFromOriginal(db);
-    runner = builder.build(dao, changeService, lockChecker, mongoDatabaseProxy, dbProxy);
+    runner = builder.build(dao, changeService, lockChecker, mongoDatabaseProxy);
 
     // when
     runner.execute();
@@ -144,8 +135,7 @@ public class MongockLockCheckerIntegrationTest {
     proxyFactory = new ProxyFactory(preInterceptor, proxyCreatordMethods, unInterceptedMethods);
     when(dao.isNewChange(any(ChangeEntry.class))).thenReturn(true);
     MongoDatabase mongoDatabaseProxy = proxyFactory.createProxyFromOriginal(mongoDatabase);
-    DB dbProxy = proxyFactory.createProxyFromOriginal(db);
-    runner = builder.build(dao, changeService, lockChecker, mongoDatabaseProxy, dbProxy);
+    runner = builder.build(dao, changeService, lockChecker, mongoDatabaseProxy);
 
     // when
     runner.execute();

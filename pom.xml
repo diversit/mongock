@@ -9,7 +9,7 @@
   <modules>
     <module>mongock-core</module>
     <module>mongock-spring</module>
-    <module>mongock-jongo</module>
+    <!--<module>mongock-jongo</module>--><!-- Disabled Jongo since it still uses the deprecated 'DB' instead of 'MongoDatabase' type. -->
   </modules>
 
   <groupId>com.github.cloudyrock.mongock</groupId>
@@ -72,9 +72,9 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>com.github.fakemongo</groupId>
-        <artifactId>fongo</artifactId>
-        <version>2.1.1</version>
+        <groupId>de.bwaldvogel</groupId>
+        <artifactId>mongo-java-server</artifactId>
+        <version>1.11.1</version>
         <scope>test</scope>
       </dependency>
     </dependencies>

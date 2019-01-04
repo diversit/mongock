@@ -1,6 +1,5 @@
 package com.github.cloudyrock.mongock;
 
-import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
@@ -151,24 +150,20 @@ public class MongockBuilder {
     ChangeService changeService = new ChangeService();
     changeService.setChangeLogsBasePackage(changeLogsScanPackage);
 
-    final DB db = mongoClient.getDB(databaseName);
     return this.build(
         changeEntryRepository,
         changeService,
         lockChecker,
-        proxyFactory.createProxyFromOriginal(mongoClient.getDatabase(databaseName), MongoDatabase.class),
-        proxyFactory.createProxyFromOriginal(db, DB.class)
+        proxyFactory.createProxyFromOriginal(mongoClient.getDatabase(databaseName), MongoDatabase.class)
         );
   }
 
   Mongock build(ChangeEntryRepository changeEntryRepository,
                 ChangeService changeService,
                 LockChecker lockChecker,
-                MongoDatabase mongoDatabaseProxy,
-                DB dbProxy) {
+                MongoDatabase mongoDatabaseProxy) {
     Mongock mongock = new Mongock(changeEntryRepository, mongoClient,  changeService, lockChecker);
     mongock.setChangelogMongoDatabase(mongoDatabaseProxy);
-    mongock.setChangelogDb(dbProxy);
     mongock.setEnabled(enabled);
     mongock.setThrowExceptionIfCannotObtainLock(throwExceptionIfCannotObtainLock);
     return mongock;

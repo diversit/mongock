@@ -27,7 +27,7 @@ public class SpringMongockTest extends SpringMongockTestBase {
     runner.execute();
 
     // then
-    verify(changeEntryRepository, times(13)).save(any(ChangeEntry.class)); // 13 changesets saved to dbchangelog
+    verify(changeEntryRepository, times(11)).save(any(ChangeEntry.class)); // 13 changesets saved to dbchangelog
 
     // dbchangelog collection checking
     long change1 = fakeMongoDatabase.getCollection(CHANGELOG_COLLECTION_NAME).count(new Document()
@@ -46,14 +46,10 @@ public class SpringMongockTest extends SpringMongockTestBase {
         .append(ChangeEntry.KEY_CHANGEID, "test4")
         .append(ChangeEntry.KEY_AUTHOR, "testuser"));
     assertEquals(1, change4);
-    long change5 = fakeMongoDatabase.getCollection(CHANGELOG_COLLECTION_NAME).count(new Document()
-        .append(ChangeEntry.KEY_CHANGEID, "test5")
-        .append(ChangeEntry.KEY_AUTHOR, "testuser"));
-    assertEquals(1, change5);
 
     long changeAll = fakeMongoDatabase.getCollection(CHANGELOG_COLLECTION_NAME).count(new Document()
         .append(ChangeEntry.KEY_AUTHOR, "testuser"));
-    assertEquals(12, changeAll);
+    assertEquals(10, changeAll);
   }
 
   @Test

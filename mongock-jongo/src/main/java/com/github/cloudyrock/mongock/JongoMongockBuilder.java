@@ -78,13 +78,11 @@ public class JongoMongockBuilder extends MongockBuilder {
     ChangeService changeService = new ChangeService();
     changeService.setChangeLogsBasePackage(changeLogsScanPackage);
 
-    final DB db = mongoClient.getDB(databaseName);
     return this.build(
         changeEntryRepository,
         changeService,
         lockChecker,
         proxyFactory.createProxyFromOriginal(mongoClient.getDatabase(databaseName), MongoDatabase.class),
-        proxyFactory.createProxyFromOriginal(db, DB.class),
         proxyFactory.createProxyFromOriginal(jongo != null ? jongo : new Jongo(db), Jongo.class)
     );
   }
@@ -93,11 +91,9 @@ public class JongoMongockBuilder extends MongockBuilder {
                 ChangeService changeService,
                 LockChecker lockChecker,
                 MongoDatabase mongoDatabaseProxy,
-                DB dbProxy,
                 Jongo jongoProxy) {
     JongoMongock mongock = new JongoMongock(changeEntryRepository, mongoClient,  changeService, lockChecker);
     mongock.setChangelogMongoDatabase(mongoDatabaseProxy);
-    mongock.setChangelogDb(dbProxy);
     mongock.setJongo(jongoProxy);
     mongock.setEnabled(enabled);
     mongock.setThrowExceptionIfCannotObtainLock(throwExceptionIfCannotObtainLock);

@@ -90,13 +90,11 @@ public class SpringMongockBuilder extends MongockBuilder {
     changeService.setEnvironment(springEnvironment);
     changeService.setChangeLogsBasePackage(changeLogsScanPackage);
 
-    final DB db = mongoClient.getDB(databaseName);
     return this.build(
         changeEntryRepository,
         changeService,
         lockChecker,
         proxyFactory.createProxyFromOriginal(mongoClient.getDatabase(databaseName), MongoDatabase.class),
-        proxyFactory.createProxyFromOriginal(db, DB.class),
         proxyFactory.createProxyFromOriginal(mongoTemplate != null ? mongoTemplate : new MongoTemplate(mongoClient, databaseName), MongoTemplate.class)
     );
   }
@@ -105,11 +103,9 @@ public class SpringMongockBuilder extends MongockBuilder {
                 ChangeService changeService,
                 LockChecker lockChecker,
                 MongoDatabase mongoDatabaseProxy,
-                DB dbProxy,
                 MongoTemplate mongoTemplateProxy) {
     SpringMongock mongock = new SpringMongock(changeEntryRepository, mongoClient,  changeService, lockChecker);
     mongock.setChangelogMongoDatabase(mongoDatabaseProxy);
-    mongock.setChangelogDb(dbProxy);
     mongock.setMongoTemplate(mongoTemplateProxy);
     mongock.setEnabled(enabled);
     mongock.setThrowExceptionIfCannotObtainLock(throwExceptionIfCannotObtainLock);

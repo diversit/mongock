@@ -5,7 +5,9 @@ import com.github.cloudyrock.mongock.ChangeSet;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 
 /**
  *
@@ -14,12 +16,12 @@ import com.mongodb.client.MongoDatabase;
 @ChangeLog(order = "5")
 public class ProxiesMongockTestResource {
 
-  @ChangeSet(author = "testuser", id = "proxyDbTest", order = "01")
-  public void testInsertWithDB(DB db) throws InterruptedException {
-    DBCollection coll = db.getCollection("anyCollection");
+  @ChangeSet(author = "testuser", id = "ProxyMongoDatabaseInsertTest", order = "01")
+  public void testInsertWithDB(MongoDatabase mongoDatabase) {
+    MongoCollection<Document> coll = mongoDatabase.getCollection("anyCollection");
 
-    coll.insert(new BasicDBObject("value", "value1"));
-    coll.insert(new BasicDBObject("value", "value2"));
+    coll.insertOne(Document.parse(new BasicDBObject("value", "value1").toJson()));
+    coll.insertOne(Document.parse(new BasicDBObject("value", "value2").toJson()));
   }
 
   @ChangeSet(author = "testuser", id = "ProxyMongoDatabaseTest", order = "02")

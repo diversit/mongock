@@ -36,7 +36,7 @@ public class MongockTest extends MongockTestBase {
     runner.execute();
 
     // then
-    verify(changeEntryRepository, times(11)).save(any(ChangeEntry.class)); // 11 changesets saved to dbchangelog
+    verify(changeEntryRepository, times(9)).save(any(ChangeEntry.class)); // 11 changesets saved to dbchangelog
 
     // dbchangelog collection checking
     long change1 = fakeMongoDatabase.getCollection(CHANGELOG_COLLECTION_NAME).count(new Document()
@@ -55,14 +55,10 @@ public class MongockTest extends MongockTestBase {
         .append(ChangeEntry.KEY_CHANGEID, "test4")
         .append(ChangeEntry.KEY_AUTHOR, "testuser"));
     assertEquals(1, change4);
-    long change5 = fakeMongoDatabase.getCollection(CHANGELOG_COLLECTION_NAME).count(new Document()
-        .append(ChangeEntry.KEY_CHANGEID, "test5")
-        .append(ChangeEntry.KEY_AUTHOR, "testuser"));
-    assertEquals(1, change5);
 
     long changeAll = fakeMongoDatabase.getCollection(CHANGELOG_COLLECTION_NAME).count(new Document()
         .append(ChangeEntry.KEY_AUTHOR, "testuser"));
-    assertEquals(11, changeAll);
+    assertEquals(9, changeAll);
   }
 
   @Test
@@ -179,7 +175,7 @@ public class MongockTest extends MongockTestBase {
         .when(changeService).fetchChangeLogs();
     doReturn(changeLog).when(changeService).createInstance(any(Class.class));
     doReturn(Arrays.asList(
-        ProxiesMongockTestResource.class.getDeclaredMethod("testInsertWithDB", DB.class),
+        ProxiesMongockTestResource.class.getDeclaredMethod("testInsertWithDB", MongoDatabase.class),
         ProxiesMongockTestResource.class.getDeclaredMethod("testMongoDatabase", MongoDatabase.class)))
         .when(changeService).fetchChangeSets(any(Class.class));
 
@@ -188,9 +184,6 @@ public class MongockTest extends MongockTestBase {
     when(changeEntryRepository.isNewChange(any(ChangeEntry.class))).thenReturn(true);
     runner.setChangelogMongoDatabase(fakeMongoDatabase);
 
-    DB proxyDb = mock(DB.class);
-    runner.setChangelogDb(proxyDb);
-
     MongoDatabase proxyMongoDatabase = mock(MongoDatabase.class);
     runner.setChangelogMongoDatabase(proxyMongoDatabase);
 
@@ -198,7 +191,7 @@ public class MongockTest extends MongockTestBase {
     runner.execute();
 
     //then
-    verify(changeLog, new Times(1)).testInsertWithDB(proxyDb);
+    verify(changeLog, new Times(1)).testInsertWithDB(proxyMongoDatabase);
     verify(changeLog, new Times(1)).testMongoDatabase(proxyMongoDatabase);
   }
 

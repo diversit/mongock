@@ -1,3 +1,24 @@
+## Fork of loudyrock/mongock
+
+This library is superior to MongoBee because it supports a much newer Mongo Java Driver version
+which support the mongodb+src connection url.
+Also, it is no longer using Fongo for testing since Fongo is hopelessly behind and there do not 
+seem to be any activity on the project anymore. 
+
+Main changes with original:
+- Updated mongo java driver to support 'mongodb+src' connection url. Required at least driver v3.6.x.
+- Removed support for deprecated 'com.mongodb.DB' class. Updated examples and test cases.
+- (temporary) **removed Jongo module** since it can only use the deprecated com.mongodb.DB type which is now removed from this project.
+Can be re-enabled when Jongo supports com.mongodb.client.MongoDatabase.
+
+Minor changes:
+- Replaced Fongo with [Mongo Java Server](https://github.com/bwaldvogel/mongo-java-server) since Fongo only uses the obsolete 'DB' instead of 'MongoDatabase'
+- Modules can now reuse mongock-core test sources. Removed some duplicate resource classes.
+- Fixed an issue in ProxyMethodInterceptor.invokeMethod since test cases failed because it could not invoke a method with a "public" modifier. 
+- Added the abstract class MongoServerBuilder to share common functionality over test classes 
+and therefore removing duplicate code.
+
+
 <p align="center">
     <img src="https://raw.githubusercontent.com/cloudyrock/mongock/master/misc/logo.png" width="200" />
 </p>
@@ -201,7 +222,7 @@ package com.example.yourapp.changelogs;
 public class DatabaseChangelog {
   
   @ChangeSet(order = "001", id = "someChangeId", author = "testAuthor")
-  public void importantWorkToDo(DB db){
+  public void importantWorkToDo(MongoDatabase mongoDatabase){
      // task implementation
   }
 
@@ -256,17 +277,7 @@ public void someChange2(MongoDatabase db) {
   mycollection.insertOne(doc);
 }
 
-@ChangeSet(order = "003", id = "someChangeWithDb", author = "testAuthor")
-public void someChange3(DB db) {
-  // This is deprecated in mongo-java-driver 3.x, use MongoDatabase instead
-  // type: com.mongodb.DB : original MongoDB driver v. 2.x, operations allowed by driver are possible
-  // example: 
-  DBCollection mycollection = db.getCollection("mycollection");
-  BasicDBObject doc = new BasicDBObject().append("test", "1");
-  mycollection .insert(doc);
-}
-
-@ChangeSet(order = "004", id = "someChangeWithJongo", author = "testAuthor")
+@ChangeSet(order = "003", id = "someChangeWithJongo", author = "testAuthor")
 public void someChange4(Jongo jongo) {
   // type: org.jongo.Jongo : Jongo driver can be used, used for simpler notation
   // example:
@@ -274,7 +285,7 @@ public void someChange4(Jongo jongo) {
   mycollection.insert("{test : 1}");
 }
 
-@ChangeSet(order = "005", id = "someChangeWithSpringDataTemplate", author = "testAuthor")
+@ChangeSet(order = "004", id = "someChangeWithSpringDataTemplate", author = "testAuthor")
 public void someChange5(MongoTemplate mongoTemplate) {
   // type: org.springframework.data.mongodb.core.MongoTemplate
   // Spring Data integration allows using MongoTemplate in the ChangeSet
@@ -282,7 +293,7 @@ public void someChange5(MongoTemplate mongoTemplate) {
   mongoTemplate.save(myEntity);
 }
 
-@ChangeSet(order = "006", id = "someChangeWithSpringDataTemplate", author = "testAuthor")
+@ChangeSet(order = "005", id = "someChangeWithSpringDataTemplate", author = "testAuthor")
 public void someChange6(MongoTemplate mongoTemplate, Environment environment) {
   // type: org.springframework.data.mongodb.core.MongoTemplate
   // type: org.springframework.core.env.Environment
@@ -304,7 +315,7 @@ _Example 1_: annotated change set will be invoked for a `dev` profile
 ```java
 @Profile("dev")
 @ChangeSet(author = "testuser", id = "myDevChangest", order = "01")
-public void devEnvOnly(DB db){
+public void devEnvOnly(MongoDatabase mongoDatabase){
   // ...
 }
 ```
@@ -314,7 +325,7 @@ _Example 2_: all change sets in a changelog will be invoked for a `test` profile
 @Profile("test")
 public class ChangelogForTestEnv{
   @ChangeSet(author = "testuser", id = "myTestChangest", order = "01")
-  public void testingEnvOnly(DB db){
+  public void testingEnvOnly(MongoDatabase mongoDatabase){
     // ...
   } 
 }

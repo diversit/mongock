@@ -1,6 +1,5 @@
 package com.github.cloudyrock.mongock;
 
-import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
@@ -28,7 +27,6 @@ public class Mongock implements Closeable {
   private boolean throwExceptionIfCannotObtainLock;
   private boolean enabled;
   private MongoDatabase changelogMongoDatabase;
-  private DB changelogDb;
 
   protected Mongock(ChangeEntryRepository changeEntryRepository,
           MongoClient mongoClient,
@@ -50,10 +48,6 @@ public class Mongock implements Closeable {
 
   void setChangelogMongoDatabase(MongoDatabase changelogMongoDatabase) {
     this.changelogMongoDatabase = changelogMongoDatabase;
-  }
-
-  void setChangelogDb(DB changelogDb) {
-    this.changelogDb = changelogDb;
   }
 
   public void execute() {
@@ -146,11 +140,6 @@ public class Mongock implements Closeable {
   protected void executeChangeSetMethod(Method changeSetMethod, Object changeLogInstance)
       throws IllegalAccessException, InvocationTargetException {
     if (changeSetMethod.getParameterTypes().length == 1
-        && changeSetMethod.getParameterTypes()[0].equals(DB.class)) {
-      logger.debug("method with DB argument");
-
-      changeSetMethod.invoke(changeLogInstance, this.changelogDb);
-    } else if (changeSetMethod.getParameterTypes().length == 1
         && changeSetMethod.getParameterTypes()[0].equals(MongoDatabase.class)) {
       logger.debug("method with MongoDatabase argument");
 
@@ -164,5 +153,4 @@ public class Mongock implements Closeable {
           " has wrong arguments list. Please see docs for more info!");
     }
   }
-
 }

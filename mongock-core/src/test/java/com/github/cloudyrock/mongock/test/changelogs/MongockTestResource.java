@@ -27,23 +27,16 @@ public class MongockTestResource {
   }
 
   @ChangeSet(author = "testuser", id = "test3", order = "03")
-  public void testChangeSet3(DB db) {
+  public void testChangeSet3() {
 
-    System.out.println("invoked 3 with db=" + db.toString());
+    System.out.println("invoked 3");
 
   }
 
   @ChangeSet(author = "testuser", id = "test4", order = "04")
-  public void testChangeSet4() {
+  public void testChangeSet4(MongoDatabase mongoDatabase) {
 
-    System.out.println("invoked 4");
-
-  }
-
-  @ChangeSet(author = "testuser", id = "test5", order = "05")
-  public void testChangeSet5(MongoDatabase mongoDatabase) {
-
-    System.out.println("invoked 5 with mongoDatabase=" + mongoDatabase.toString());
+    System.out.println("invoked 4 with mongoDatabase=" + mongoDatabase.toString());
 
   }
 

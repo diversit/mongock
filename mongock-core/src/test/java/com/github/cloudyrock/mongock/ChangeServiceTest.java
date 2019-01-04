@@ -3,15 +3,15 @@ package com.github.cloudyrock.mongock;
 import com.github.cloudyrock.mongock.test.changelogs.AnotherMongockTestResource;
 import com.github.cloudyrock.mongock.test.changelogs.MongockTestResource;
 import com.github.cloudyrock.mongock.utils.ChangeLogWithDuplicate;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -43,7 +43,7 @@ public class ChangeServiceTest {
 
     // then
     assertTrue(foundMethods != null);
-    assertEquals(5, foundMethods.size());
+    assertEquals(4, foundMethods.size());
   }
 
   @Test
@@ -58,7 +58,7 @@ public class ChangeServiceTest {
 
     // then
     assertTrue(foundMethods != null);
-    assertEquals(6, foundMethods.size());
+    assertEquals(5, foundMethods.size());
   }
 
   @Test
