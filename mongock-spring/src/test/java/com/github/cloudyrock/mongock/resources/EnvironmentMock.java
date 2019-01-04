@@ -1,6 +1,7 @@
 package com.github.cloudyrock.mongock.resources;
 
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 
 /**
  * Mock for Spring environment
@@ -30,6 +31,9 @@ public class EnvironmentMock implements Environment {
   public boolean acceptsProfiles(String... strings) {
     return false;
   }
+
+  @Override
+  public boolean acceptsProfiles(Profiles profiles) { return false; }
 
   @Override
   public boolean containsProperty(String s) {
