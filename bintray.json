@@ -18,6 +18,7 @@
   },
   "files":
   [
+    {"includePattern": "pom.xml", "uploadPattern": "com/github/cloudyrock/mongock/mongock/${project.version}/mongock-${project.version}.pom"},
     {"includePattern": "mongock-core/target/(.*\.jar)", "uploadPattern": "com/github/cloudyrock/mongock/mongock-core/${project.version}/$1"},
     {"includePattern": "mongock-core/pom.xml", "uploadPattern": "com/github/cloudyrock/mongock/mongock-core/${project.version}/mongock-core-${project.version}.pom"},
     {"includePattern": "mongock-spring/target/(.*\.jar)", "uploadPattern": "com/github/cloudyrock/mongock/mongock-spring/${project.version}/$1"},
