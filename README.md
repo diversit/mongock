@@ -1,5 +1,10 @@
 ## Fork of loudyrock/mongock
 
+[![Bintray Download](https://api.bintray.com/packages/diversit-eu/maven/mongock/images/download.svg)](https://bintray.com/diversit-eu/maven/mongock/_latestVersion)
+[![Build Status](https://travis-ci.org/diversit/mongock.svg?branch=update-mongo-java-driver)](https://travis-ci.org/diversit/mongock)
+[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/diversit/mongock/blob/update-mongo-java-driver/LICENSE)
+
+
 This library is superior to MongoBee because it supports a much newer Mongo Java Driver version
 which support the mongodb+src connection url.
 Also, it is no longer using Fongo for testing since Fongo is hopelessly behind and there do not 
@@ -18,17 +23,12 @@ Minor changes:
 - Added the abstract class MongoServerBuilder to share common functionality over test classes 
 and therefore removing duplicate code.
 
+---
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/cloudyrock/mongock/master/misc/logo.png" width="200" />
 </p>
 
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.cloudyrock.mongock/mongock/badge.png)](https://search.maven.org/artifact/com.github.cloudyrock.mongock/mongock)
-[![Build Status](https://travis-ci.org/cloudyrock/mongock.svg?branch=master)](https://travis-ci.org/cloudyrock/mongock)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=com.github.cloudyrock.mongock&metric=bugs)](https://sonarcloud.io/component_measures?id=com.github.cloudyrock.mongock&metric=bugs)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=com.github.cloudyrock.mongock&metric=vulnerabilities)](https://sonarcloud.io/component_measures?id=com.github.cloudyrock.mongock&metric=vulnerabilities)
-[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/dieppa/mongock/blob/master/LICENSE)
 
 
 ## LAST NEWS :bangbang::bangbang::collision::collision:

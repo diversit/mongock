@@ -1,17 +1,41 @@
 jdk: oraclejdk8
-
 language: java
-
 sudo: false
 
+# Skipping installation phase
 install: true
-
-#script: .infra/mvn_sonar.sh
 
 branches:
   only:
-    - update-mongo-java-driver
+  - update-mongo-java-driver
 
 cache:
   directories:
   - "$HOME/.m2/repository"
+
+# Set version to tag for release
+before_deploy:
+  - mvn versions:set -DnewVersion=$TRAVIS_TAG
+
+deploy:
+# Deploy releases to bintray
+- provider: bintray
+  skip_cleanup: true
+  file: target/bintray.json
+  user: diversit
+  key: $BINTRAY_API_KEY
+  on:
+    repo: diversit/mongock
+    tags: true
+
+# Automatic create release on github repo
+- provider: releases
+  skip_cleanup: true
+  api_key: $GITHUB_OAUTH_API_KEY
+  file_glob: true
+  file:
+    - "mongock-core/target/*.jar"
+    - "mongock-spring/target/*.jar"
+  on:
+    repo: diversit/mongock
+    tags: true

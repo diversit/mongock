@@ -1,0 +1,27 @@
+{
+  "package": {
+    "name": "${project.name}",
+    "repo": "maven",
+    "subject": "diversit-eu",
+    "website_url": "${project.url}",
+    "issue_tracker_url": "${project.url}/issues",
+    "vcs_url": "${project.url}",
+    "licenses": ["Apache-2.0"],
+    "labels": ["mongo", "migrationtool"],
+    "public_download_numbers": true,
+    "public_stats": true
+  },
+  "version": {
+    "name": "${project.version}",
+    "released": "${maven.build.timestamp}",
+    "vcs_tag": "v${project.version}"
+  },
+  "files":
+  [
+    {"includePattern": "mongock-core/target/(.*\.jar)", "uploadPattern": "com/github/cloudyrock/mongock/mongock-core/${project.version}/$1"},
+    {"includePattern": "mongock-core/pom.xml", "uploadPattern": "com/github/cloudyrock/mongock/mongock-core/${project.version}/mongock-core-${project.version}.pom"},
+    {"includePattern": "mongock-spring/target/(.*\.jar)", "uploadPattern": "com/github/cloudyrock/mongock/mongock-spring/${project.version}/$1"},
+    {"includePattern": "mongock-spring/pom.xml", "uploadPattern": "com/github/cloudyrock/mongock/mongock-spring/${project.version}/mongock-spring-${project.version}.pom"}
+  ],
+  "publish": true
+}
