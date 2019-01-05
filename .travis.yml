@@ -16,6 +16,7 @@ cache:
 # Set version to tag for release
 before_deploy:
   - mvn versions:set -DnewVersion=$TRAVIS_TAG
+  - mvn package
 
 deploy:
 # Deploy releases to bintray
